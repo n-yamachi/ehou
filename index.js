@@ -99,6 +99,8 @@ function obtainDeviceDirection(event) {
       direction = "北西";
   }
 
+  let list_element = document.getElementById("direction");
+  list_element.removeChild(list_element.firstElementChild);
   document.getElementById('direction').innerHTML = "今向いている方向は" + direction;
 }
 
