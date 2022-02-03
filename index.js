@@ -100,7 +100,7 @@ function obtainDeviceDirection(event) {
   }
 
   document.querySelector("#direction").innerHTML =
-      direction;
+      "<h1>" + direction + " : " + degrees + "</h1>";
 }
 
 // safariの権限設定
