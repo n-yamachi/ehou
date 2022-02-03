@@ -99,10 +99,8 @@ function obtainDeviceDirection(event) {
       direction = "北西";
   }
 
-  let new_element = document.createElement('h1');
-  new_element.textContent = '今向いている方向は' + direction;
-
-  textbox_element.appendChild(new_element);
+  document.querySelector("#direction").innerHTML =
+    "今向いている方向は" + direction;
 }
 
 // safariの権限設定
