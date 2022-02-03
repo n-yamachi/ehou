@@ -19,9 +19,32 @@ function judgeEhou(date = new Date) {
   }
 }
 
+// 方向を取得
+function obtainDeviceDirection() {
+
+  window.addEventListener('deviceorientation', function(event) {
+    console.log('方角       : ' + event.alpha);
+    console.log('上下の傾き : ' + event.beta);
+    console.log('左右の傾き : ' + event.gamma);
+    
+    console.log('コンパスの向き : ' + event.webkitCompassHeading);
+    console.log('コンパスの精度 : ' + event.webkitCompassAccuracy);
+
+    let msg = '方角' + event.alpha;
+    let textbox_element = document.getElementById('direction');
+
+    let new_element = document.createElement('h2');
+    new_element.textContent = msg;
+
+    textbox_element.appendChild(new_element);
+  });
+}
+
 let textbox_element = document.getElementById('ehou');
 
 let new_element = document.createElement('h1');
 new_element.textContent = '今年の恵方は' + judgeEhou();
 
 textbox_element.appendChild(new_element);
+
+obtainDeviceDirection();
