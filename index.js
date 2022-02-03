@@ -21,6 +21,13 @@ function judgeEhou(date = new Date) {
 
 // 方向を取得
 function obtainDeviceDirection() {
+  document.querySelector("#permit").addEventListener("click", permitDeviceOrientationForSafari);
+
+  window.addEventListener(
+      "deviceorientation",
+      orientation,
+      true
+  );
 
   window.addEventListener('deviceorientation', function(event) {
     console.log('方角       : ' + event.alpha);
