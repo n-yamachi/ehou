@@ -24,22 +24,21 @@ function init() {
   // 簡易的なOS判定
   os = detectOSSimply();
   if (os == "iphone") {
+    textbox_element.appendChild(new_element);
       // safari用。DeviceOrientation APIの使用をユーザに許可して貰う
       document.querySelector("#permit").addEventListener("click", permitDeviceOrientationForSafari);
 
       window.addEventListener(
           "deviceorientation",
-          orientation,
+          obtainDeviceDirection,
           true
       );
   } else if (os == "android") {
       window.addEventListener(
           "deviceorientationabsolute",
-          orientation,
+          obtainDeviceDirection,
           true
       );
-  } else {
-      window.alert("PC未対応サンプル");
   }
 }
 
@@ -64,35 +63,45 @@ function detectOSSimply() {
 
 // 方向を取得
 function obtainDeviceDirection() {
+  let absolute = event.absolute;
+  let alpha = event.alpha;
+  let beta = event.beta;
+  let gamma = event.gamma;
 
-  os = detectOSSimply();
+  let degrees;
   if (os == "iphone") {
-      // safari用。DeviceOrientation APIの使用をユーザに許可して貰う
-      document.querySelector("#permit").addEventListener("click", permitDeviceOrientationForSafari);
+      // webkitCompasssHeading値を採用
+      degrees = event.webkitCompassHeading;
 
-      window.addEventListener(
-          "deviceorientation",
-          orientation,
-          true
-      );
+  } else {
+      // deviceorientationabsoluteイベントのalphaを補正
+      degrees = compassHeading(alpha, beta, gamma);
   }
 
-  window.addEventListener('deviceorientation', function(event) {
-    console.log('方角       : ' + event.alpha);
-    console.log('上下の傾き : ' + event.beta);
-    console.log('左右の傾き : ' + event.gamma);
-    
-    console.log('コンパスの向き : ' + event.webkitCompassHeading);
-    console.log('コンパスの精度 : ' + event.webkitCompassAccuracy);
+  let direction;
+  if (
+      (degrees > 337.5 && degrees < 360) ||
+      (degrees > 0 && degrees < 22.5)
+  ) {
+      direction = "北";
+  } else if (degrees > 22.5 && degrees < 67.5) {
+      direction = "北東";
+  } else if (degrees > 67.5 && degrees < 112.5) {
+      direction = "東";
+  } else if (degrees > 112.5 && degrees < 157.5) {
+      direction = "東南";
+  } else if (degrees > 157.5 && degrees < 202.5) {
+      direction = "南";
+  } else if (degrees > 202.5 && degrees < 247.5) {
+      direction = "南西";
+  } else if (degrees > 247.5 && degrees < 292.5) {
+      direction = "西";
+  } else if (degrees > 292.5 && degrees < 337.5) {
+      direction = "北西";
+  }
 
-    let msg = '方角' + event.alpha;
-    let textbox_element = document.getElementById('direction');
-
-    let new_element = document.createElement('h2');
-    new_element.textContent = msg;
-
-    textbox_element.appendChild(new_element);
-  });
+  document.querySelector("#direction").innerHTML =
+      direction + " : " + degrees;
 }
 
 // safariの権限設定
@@ -117,5 +126,3 @@ let new_element = document.createElement('h1');
 new_element.textContent = '今年の恵方は' + judgeEhou();
 
 textbox_element.appendChild(new_element);
-
-obtainDeviceDirection();
