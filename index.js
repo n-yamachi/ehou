@@ -61,7 +61,7 @@ function detectOSSimply() {
 }
 
 // 方向を取得
-function obtainDeviceDirection() {
+function obtainDeviceDirection(event) {
   let absolute = event.absolute;
   let alpha = event.alpha;
   let beta = event.beta;
